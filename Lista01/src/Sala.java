@@ -31,7 +31,11 @@ public class Sala {
 	
 	public void ocupaLugar() {
 		// TODO mais para frente, fazer um novo metodo que receba mais do que um lugar
-		this.lugaresOcupados++;
+		if(this.temLugar()) {
+			this.lugaresOcupados++;
+		} else {
+			System.err.println("Não existem mais lugares disponíveis.");
+		}
 	}
 	
 	public void esvazia() {
