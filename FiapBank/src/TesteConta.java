@@ -3,12 +3,12 @@ public class TesteConta {
 	
 	public static void main(String[] args) {
 		
-		Conta primeiraConta = new Conta();
+		Conta primeiraConta = new Conta(1, 1562);
 		primeiraConta.deposita(5500);
 		
 		System.out.println(primeiraConta.getSaldo());
 		
-		Conta segundaConta = new Conta();
+		Conta segundaConta = new Conta(1, 1563);
 		segundaConta.deposita(3000);
 		boolean sacou = segundaConta.saca(150);
 		

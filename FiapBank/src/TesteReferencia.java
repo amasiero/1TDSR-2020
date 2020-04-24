@@ -2,7 +2,7 @@
 public class TesteReferencia {
 
 	public static void main(String[] args) {
-		Conta conta = new Conta();
+		Conta conta = new Conta(1, 1562);
 		conta.deposita(500);
 		System.out.println(conta.getSaldo());
 		

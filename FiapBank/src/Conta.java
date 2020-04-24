@@ -1,11 +1,29 @@
 public class Conta { // Tipo por/de referência
 	
-	private String titular;
+	private Cliente titular;
 	private int agencia;
 	private int numero;
 	private double saldo;
+	private static int totalContas;
 	
-	public String getTitular() {
+	public Conta(int agencia, int numero) {
+		System.out.println("Primeiro construtor");
+		this.agencia = agencia;
+		this.numero = numero;
+		Conta.totalContas++;
+	}
+	
+	public Conta(int agencia, int numero, Cliente titular) {
+		this(agencia, numero);
+		this.titular = titular;
+		System.out.println("Segundo construtor");
+	}
+	
+	public static int getTotalContas() {
+		return Conta.totalContas;
+	}
+	
+	public Cliente getTitular() {
 		return this.titular;
 	}
 
@@ -20,13 +38,20 @@ public class Conta { // Tipo por/de referência
 	public double getSaldo() {
 		return this.saldo;
 	}
+	
+	public void setTitular(Cliente titular) {
+		this.titular = titular;
+	}
 
 	public void deposita(double valor) {
-		this.saldo = this.saldo + valor;
+		if(this.valorPositivo(valor)) {
+			this.saldo = this.saldo + valor;
+		}
 	}
 	
 	public boolean saca(double valor) {
-		if(this.validaSaldo(valor)) {
+		if(this.saldoDisponivel(valor) && 
+				this.valorPositivo(valor)) {
 			this.saldo = this.saldo - valor;
 			return true;
 		} 
@@ -41,7 +66,11 @@ public class Conta { // Tipo por/de referência
 		return false;
 	}
 	
-	public boolean validaSaldo(double valor) {
+	public boolean saldoDisponivel(double valor) {
 		return this.saldo >= valor;
+	}
+	
+	public boolean valorPositivo(double valor) {
+		return valor > 0;
 	}
 }
