@@ -17,7 +17,7 @@ public class TesteDeclarativeProgramming {
 				.filter(automovel -> automovel.getPreco() < 15000.0)
 				.collect(Collectors.toList());
 		
-		//filtrado.forEach(System.out::println);
+		filtrado.forEach(System.out::println);
 		// Sort
 		List<Automovel> ordenado = automoveis.stream()
 				.sorted(Comparator
@@ -26,32 +26,32 @@ public class TesteDeclarativeProgramming {
 				)
 				.collect(Collectors.toList());
 		
-		// ordenado.forEach(System.out::println);
+		ordenado.forEach(System.out::println);
 		
 		// All match
 		boolean allMatch = automoveis.stream()
 				.allMatch(auto -> auto.getPreco() > 10000);
-		// System.out.println(allMatch);
+		System.out.println(allMatch);
 		
 		// Any match
 		boolean anyMatch = automoveis.stream()
 				.anyMatch(auto -> auto.getPreco() < 13000);
-		// System.out.println(anyMatch);
+		System.out.println(anyMatch);
 		
 		// None match
 		boolean noneMatch = automoveis.stream()
 				.noneMatch(auto -> auto.getPreco() < 12000);
-		// System.out.println(noneMatch);
+		System.out.println(noneMatch);
 		
 		// Max
 		automoveis.stream()
-			.max(Comparator.comparing(Automovel::getPreco));
-//			.ifPresent(System.out::println);
-		// Min
+			.max(Comparator.comparing(Automovel::getPreco))
+			.ifPresent(System.out::println);
 		
+		// Min
 		automoveis.stream()
-			.min(Comparator.comparing(Automovel::getPreco));
-//			.ifPresent(System.out::println);
+			.min(Comparator.comparing(Automovel::getPreco))
+			.ifPresent(System.out::println);
 
 		// Group
 		Map<String, List<Automovel>> agrupados = automoveis.stream()
