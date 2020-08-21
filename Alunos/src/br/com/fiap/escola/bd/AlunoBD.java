@@ -44,7 +44,7 @@ public class AlunoBD {
 	
 	
 	public void desconecta(Connection conn) throws SQLException {
-		if(conn != null) conn.close();
+		if(!conn.isClosed()) conn.close();
 	}
 
 	public List<Aluno> consultaTodos() {
