@@ -32,7 +32,7 @@ public class Quarto {
 	@Override
 	public String toString() {
 		return String.format("Quarto Nro: %s -> { Categoria: %s, Max. Pessoas: %s, Valor Diária: R$ %.2f }", 
-				numero, categoria, maxPessoas, valorDiaria);
+				numero, categoria.getValue(), maxPessoas, valorDiaria);
 	}
 	
 }

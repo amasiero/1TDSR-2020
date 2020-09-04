@@ -47,21 +47,34 @@ private Connection conn;
 		return reservas;
 	}
 	
-	public void salva(Reserva reserva) throws ClassNotFoundException, SQLException {
+	public Reserva salva(Reserva reserva) throws ClassNotFoundException, SQLException {
 		this.conecta();
 		
-		String sql = "insert into tb_reserva(id, id_quarto, data_entrada, data_saida, qtde_pessoas)"
-				+ "values(sq_reserva.nextval, ?, ?, ?, ?)";
+		String sql = "select sq_reserva.nextval as id from dual";
 		PreparedStatement stmt = this.conn.prepareStatement(sql);
+		ResultSet rs = stmt.executeQuery();
+		Long id = null;
+		if(rs.next()) id = rs.getLong("id");
 		
-		stmt.setInt(1, reserva.getQuarto().getNumero());
-		stmt.setDate(2, Date.valueOf(reserva.getDataEntrada()));
-		stmt.setDate(3, Date.valueOf(reserva.getDataSaida()));
-		stmt.setInt(4, reserva.getQtdePessoas());
+		if(id == null) throw new SQLException("Não foi possível gerar um identificador de reserva");
+		
+		reserva.setId(id);
+		
+		sql = "insert into tb_reserva(id, id_quarto, data_entrada, data_saida, qtde_pessoas)"
+				+ "values(?, ?, ?, ?, ?)";
+		stmt = this.conn.prepareStatement(sql);
+		
+		stmt.setLong(1, reserva.getId());
+		stmt.setInt(2, reserva.getQuarto().getNumero());
+		stmt.setDate(3, Date.valueOf(reserva.getDataEntrada()));
+		stmt.setDate(4, Date.valueOf(reserva.getDataSaida()));
+		stmt.setInt(5, reserva.getQtdePessoas());
 		
 		stmt.executeUpdate();
 		
 		this.desconecta();
+		
+		return reserva;
 	}
 	
 	private void desconecta() throws SQLException {

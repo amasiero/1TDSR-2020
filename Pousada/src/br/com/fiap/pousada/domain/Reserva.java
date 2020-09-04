@@ -1,6 +1,9 @@
 package br.com.fiap.pousada.domain;
 
 import java.time.LocalDate;
+import java.time.ZoneOffset;
+
+import br.com.fiap.pousada.helper.DateHelper;
 
 public class Reserva {
 	private Long id;
@@ -43,5 +46,22 @@ public class Reserva {
 	
 	public Integer getQtdePessoas() {
 		return qtdePessoas;
+	}
+	
+	public Double calculaValorHospedagem() {
+		Long entrada = dataEntrada.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
+		Long saida = dataSaida.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
+		
+		Long dias = (saida - entrada) / 1000 / 60 / 60 / 24;
+		
+		return dias * quarto.getValorDiaria();
+		
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("Reserva #%s -> {\n\tQuarto nro: %s, \n\tData de entrada: %s, "
+				+ "\n\tData de saída: %s, \n\tQtde. Pessoas: %s, \n\tValor Total: R$ %.2f \n}", id, quarto.getNumero(), 
+				DateHelper.toText(dataEntrada), DateHelper.toText(dataSaida), qtdePessoas, calculaValorHospedagem());
 	}
 }
