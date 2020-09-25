@@ -9,19 +9,31 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import br.com.fiap.pousada.domain.Quarto;
 import br.com.fiap.pousada.domain.Reserva;
+import br.com.fiap.pousada.exception.LoadFileException;
+import br.com.fiap.pousada.helper.FileHelper;
 
 public class ReservaDAO {
 	
 private Connection conn;
 	
-	private void conecta() throws ClassNotFoundException, SQLException {
-		this.conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "system", "system");
+	private void conecta() throws SQLException {
+		try {
+			Properties props = FileHelper.loadProperties();
+			this.conn = DriverManager.getConnection(
+					props.getProperty("database.url"),
+					props.getProperty("database.user"),
+					props.getProperty("database.password")
+			);
+		} catch (LoadFileException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 	
-	public List<Reserva> consultaTodas() throws ClassNotFoundException, SQLException {
+	public List<Reserva> consultaTodas() throws SQLException {
 		List<Reserva> reservas = new ArrayList<>();
 		this.conecta();
 		
@@ -47,7 +59,7 @@ private Connection conn;
 		return reservas;
 	}
 	
-	public Reserva salva(Reserva reserva) throws ClassNotFoundException, SQLException {
+	public Reserva salva(Reserva reserva) throws SQLException {
 		this.conecta();
 		
 		String sql = "select sq_reserva.nextval as id from dual";
@@ -56,7 +68,7 @@ private Connection conn;
 		Long id = null;
 		if(rs.next()) id = rs.getLong("id");
 		
-		if(id == null) throw new SQLException("Não foi possível gerar um identificador de reserva");
+		if(id == null) throw new SQLException("NÃ£o foi possÃ­vel gerar um identificador de reserva");
 		
 		reserva.setId(id);
 		

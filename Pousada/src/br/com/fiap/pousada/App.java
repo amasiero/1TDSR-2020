@@ -92,7 +92,7 @@ public class App {
 		try {
 			List<Quarto> quartos = new QuartoDAO().consultaTodos();
 			quartos.forEach(System.out::println);
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
 
@@ -119,7 +119,7 @@ public class App {
 
 		try {
 			new QuartoDAO().salva(quarto);
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
 

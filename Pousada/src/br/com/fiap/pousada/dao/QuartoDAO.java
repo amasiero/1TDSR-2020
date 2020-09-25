@@ -7,19 +7,31 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import br.com.fiap.pousada.domain.Categoria;
 import br.com.fiap.pousada.domain.Quarto;
+import br.com.fiap.pousada.exception.LoadFileException;
+import br.com.fiap.pousada.helper.FileHelper;
 
 public class QuartoDAO {
 	
 	private Connection conn;
 	
-	private void conecta() throws ClassNotFoundException, SQLException {
-		this.conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "system", "system");
+	private void conecta() throws SQLException {
+		try {
+			Properties props = FileHelper.loadProperties();
+			this.conn = DriverManager.getConnection(
+					props.getProperty("database.url"),
+					props.getProperty("database.user"),
+					props.getProperty("database.password")
+			);
+		} catch (LoadFileException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 	
-	public List<Quarto> consultaTodos() throws ClassNotFoundException, SQLException  {
+	public List<Quarto> consultaTodos() throws SQLException  {
 		List<Quarto> quartos = new ArrayList<>();
 		this.conecta();
 		
@@ -40,7 +52,7 @@ public class QuartoDAO {
 		return quartos.isEmpty() ? null : quartos;
 	}
 	
-	public Quarto consultaPorNumero(Integer numero) throws ClassNotFoundException, SQLException {
+	public Quarto consultaPorNumero(Integer numero) throws SQLException {
 		Quarto quarto = null;
 		this.conecta();
 		
@@ -60,7 +72,7 @@ public class QuartoDAO {
 		return quarto;
 	}
 	
-	public void salva(Quarto quarto) throws ClassNotFoundException, SQLException {
+	public void salva(Quarto quarto) throws SQLException {
 		this.conecta();
 		
 		String sql = String.format("insert into tb_quarto(numero, categoria, max_pessoas, valor_diaria)"
